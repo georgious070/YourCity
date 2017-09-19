@@ -24,7 +24,24 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    // Support
     compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support:recyclerview-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.0'
+
     testCompile 'junit:junit:4.12'
+
+    //Moxy
+    compile 'com.arello-mobile:moxy-android:1.4.5'
+    compile 'com.arello-mobile:moxy:1.4.5'
+    compile 'com.arello-mobile:moxy-app-compat:1.4.5'
+    compile "com.arello-mobile:moxy-android:1.4.5"
+    annotationProcessor "com.arello-mobile:moxy-compiler:1.4.5"
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    //gson
+    compile 'com.google.code.gson:gson:2.2.4'
 }
