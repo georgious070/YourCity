@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.SpinnerAdapter;
@@ -53,6 +54,4 @@ public class CountrySpinnerAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         return getCountrySpinnerView(position, convertView, parent);
     }
-
-
 }

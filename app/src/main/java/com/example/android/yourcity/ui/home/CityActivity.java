@@ -14,7 +14,7 @@ import com.example.android.yourcity.ui.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CityActivity extends BaseActivity implements CityView, CitiesAdapter.OnCityClickListener{
+public class CityActivity extends BaseActivity implements CityView, CitiesAdapter.OnCityClickListener {
 
     @InjectPresenter
     CityPresenter cityPresenter;
@@ -29,10 +29,6 @@ public class CityActivity extends BaseActivity implements CityView, CitiesAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinner = (Spinner) findViewById(R.id.spinner);
-        countrySpinnerAdapter = new CountrySpinnerAdapter(this, R.layout.spinner_item, new ArrayList<String>());
-        spinner.setAdapter(countrySpinnerAdapter);
-
         recyclerView = (RecyclerView) findViewById(R.id.recycler_cities);
         citiesAdapter = new CitiesAdapter(new ArrayList<String>(), this);
         recyclerView.setAdapter(citiesAdapter);
@@ -40,17 +36,15 @@ public class CityActivity extends BaseActivity implements CityView, CitiesAdapte
 
     @Override
     public void showCountries(List<String> countriesList) {
+        spinner = (Spinner) findViewById(R.id.spinner);
+        countrySpinnerAdapter = new CountrySpinnerAdapter(this, R.layout.spinner_item, new ArrayList<String>());
+        spinner.setAdapter(countrySpinnerAdapter);
         countrySpinnerAdapter.setData(countriesList);
     }
 
     @Override
     public void showCities(List<String> citiesList) {
         citiesAdapter.setData(citiesList);
-    }
-
-    @Override
-    public void clickCountry(AdapterView.OnItemSelectedListener listener) {
-        spinner.setOnItemSelectedListener(listener);
     }
 
     @Override

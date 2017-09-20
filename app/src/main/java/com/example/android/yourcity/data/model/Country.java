@@ -8,11 +8,11 @@ import com.google.gson.annotations.SerializedName;
 public class Country {
 
     @SerializedName("China")
-    private List<String> china = null;
+    private List<String> china;
     @SerializedName("Japan")
-    private List<String> japan = null;
+    private List<String> japan;
     @SerializedName("Thailand")
-    private List<String> thailand = null;
+    private List<String> thailand;
 
     public List<String> getChina() {
         return china;

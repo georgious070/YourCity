@@ -35,6 +35,7 @@ public class CountryRepository {
 
             @Override
             public void onResponse(Call<Country> call, retrofit2.Response<Country> response) {
+                Country country = response.body();
                 String value = new Gson().toJson(response.body());
                 try {
                     JSONObject jsonObject = new JSONObject(value);

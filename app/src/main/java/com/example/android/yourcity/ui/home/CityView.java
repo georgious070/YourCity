@@ -16,6 +16,4 @@ public interface CityView extends BaseView {
     void showCountries(List<String> countriesList);
 
     void showCities(List<String> citiesList);
-
-    void clickCountry(AdapterView.OnItemSelectedListener listener);
 }
