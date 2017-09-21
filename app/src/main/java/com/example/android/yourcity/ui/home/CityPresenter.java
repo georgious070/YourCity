@@ -5,23 +5,26 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.example.android.yourcity.App;
 import com.example.android.yourcity.busines.CountryInteractor;
 import com.example.android.yourcity.data.repository.CountryRepository;
 import com.example.android.yourcity.ui.base.BasePresenter;
 
+import javax.inject.Inject;
+
 @InjectViewState
 public class CityPresenter extends BasePresenter<CityView> {
 
-    private CountryInteractor countryInteractor;
+    @Inject
+    CountryInteractor countryInteractor;
 
     public CityPresenter() {
-        countryInteractor = new CountryInteractor(new CountryRepository());
+        App.getApp().getComponent().inject(this);
     }
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        getViewState().init();
         getViewState().showCountries(countryInteractor.getCountries());
     }
 

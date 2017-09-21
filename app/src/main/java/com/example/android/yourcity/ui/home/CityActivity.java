@@ -1,5 +1,7 @@
 package com.example.android.yourcity.ui.home;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -23,6 +25,10 @@ public class CityActivity extends BaseActivity implements CityView, CitiesAdapte
     private CitiesAdapter citiesAdapter;
     private Spinner spinner;
     private CountrySpinnerAdapter countrySpinnerAdapter;
+
+    public static Context getContext(){
+        return CityActivity.getContext();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
