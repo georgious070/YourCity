@@ -42,38 +42,38 @@ public class CountryRepository {
             public void onResponse(Call<Country> call, retrofit2.Response<Country> response) {
                 Context context = App.getApp().getApplicationContext();
                 String jsonResponse = new Gson().toJson(response.body());
+
                 try {
                     JSONObject jsonObject = new JSONObject(jsonResponse);
                     JSONArray countriesNames = jsonObject.names();
 
                     ContentValues contentValues = new ContentValues();
+
+                    List<String> citiesNames = new ArrayList<String>();
+
                     for (int i = 0; i < countriesNames.length(); i++) {
+                        JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesNames.get(i));
+                        for(int j = 0; j < citiesJsonArray.length(); j++){
+                            citiesNames.add(citiesJsonArray.getString(j));
+
+                        }
                         countries.add(countriesNames.get(i).toString());
                         contentValues.put(CountryContract.CountryEntry.COLUMN_COUNTRY, countries.get(i));
-
                         Uri uri = context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI, contentValues);
                     }
 
-                    String name = null;
-                    String projection = CountryContract.CountryEntry.COLUMN_COUNTRY;
-                    Cursor cursor = context.getContentResolver().query(CountryContract.CountryEntry.CONTENT_URI, new String[]{projection}, null, null, null, null);
-                    if (cursor.moveToFirst()) {
-                        name = cursor.getString(cursor.getColumnIndex(CountryContract.CountryEntry.COLUMN_COUNTRY));
-                    }
-
-                    String k = name;
-
-                    List<JSONArray> citiesJsonArray = new ArrayList<>();
-
-                    for (int i = 0; i < countriesNames.length(); i++) {
-                        citiesJsonArray.add(jsonObject.getJSONArray((String) countriesNames.get(i)));
-                    }
-
-                    List<String> cityNames = new ArrayList<String>();
-
-                    for (int i = 0; i < citiesJsonArray.size(); i++) {
-                        cityNames.add(citiesJsonArray.get(i).toString());
-                    }
+//                    List<String> cities = new ArrayList<String>();
+//                    String[] projection = {CountryContract.CountryEntry.COLUMN_COUNTRY};
+//                    Cursor cursorCountry = context.getContentResolver().query(CountryContract.CountryEntry.CONTENT_URI,
+//                            projection,
+//                            null,
+//                            null,
+//                            null,
+//                            null);
+//                    for (int l = 0; l < cursorCountry.getCount(); l++) {
+//                        cursorCountry.moveToNext();
+//                        cities.add(cursorCountry.getString(cursorCountry.getColumnIndex(CountryContract.CountryEntry.COLUMN_COUNTRY)));
+//                    }
 
 
                 } catch (JSONException e) {

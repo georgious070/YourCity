@@ -16,12 +16,12 @@ public class DbHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String SQL_CREATE_COUNTRIES_TABLE = "CREATE TABLE " + CountryContract.CountryEntry.TABLE_NAME
-                + "(" + CountryContract.CountryEntry.COLUMN_COUNTRY + " TEXT);";
+                + "(" + CountryContract.CountryEntry.COLUMN_COUNTRY + " TEXT PRIMARY KEY);";
         sqLiteDatabase.execSQL(SQL_CREATE_COUNTRIES_TABLE);
 
         String SQL_CREATE_CITIES_TABLE = "CREATE TABLE " + CityContract.CityEntry.TABLE_NAME +
                 "(" + CityContract.CityEntry.COLUMN_COUNTRY + " TEXT," +
-                CityContract.CityEntry.COLUMN_CITY + " TEXT);";
+                CityContract.CityEntry.COLUMN_CITY + " TEXT PRIMARY KEY);";
         sqLiteDatabase.execSQL(SQL_CREATE_CITIES_TABLE);
     }
 

@@ -10,7 +10,7 @@ import com.example.android.yourcity.ui.base.BaseView;
 
 import java.util.List;
 
-@StateStrategyType(AddToEndStrategy.class)
+@StateStrategyType(AddToEndSingleStrategy.class)
 public interface CityView extends BaseView {
 
     void showCountries(List<String> countriesList);

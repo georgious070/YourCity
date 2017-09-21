@@ -26,10 +26,6 @@ public class CityActivity extends BaseActivity implements CityView, CitiesAdapte
     private Spinner spinner;
     private CountrySpinnerAdapter countrySpinnerAdapter;
 
-    public static Context getContext(){
-        return CityActivity.getContext();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
