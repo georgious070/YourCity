@@ -21,10 +21,10 @@
         </activity>
         <activity android:name=".ui.detail.CityDetailActivity"></activity>
 
-        <!--<provider-->
-            <!--android:name=".data.repository.YourCityProvider"-->
-            <!--android:authorities="com.example.android.mydb"-->
-            <!--android:exported="false" />-->
+        <provider
+            android:name=".data.repository.YourCityProvider"
+            android:authorities="com.example.android.mydb"
+            android:exported="false" />
     </application>
 
 </manifest>
