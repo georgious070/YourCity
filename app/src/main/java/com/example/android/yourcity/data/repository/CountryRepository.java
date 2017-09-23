@@ -25,12 +25,16 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.example.android.yourcity.data.repository.CountryContract.CountryEntry.TABLE_NAME;
+
 public class CountryRepository {
 
     private final Context context;
     private final Api api;
     private List<String> countries;
     private List<String> cities;
+    private DbHelper dbHelper;
+    private SQLiteDatabase sqLiteDatabase;
 
     @Inject
     public CountryRepository(Context context, Api api) {
@@ -50,6 +54,8 @@ public class CountryRepository {
                     JSONObject jsonObject = new JSONObject(jsonResponse);
                     JSONArray countriesJsonArray = jsonObject.names();
 
+                    dbHelper = new DbHelper(context);
+                    sqLiteDatabase = dbHelper.getWritableDatabase();
                     ContentValues contentValues = new ContentValues();
 
                     for (int i = 0; i < countriesJsonArray.length(); i++) {
@@ -57,21 +63,21 @@ public class CountryRepository {
                         for (int j = 0; j < citiesJsonArray.length(); j++) {
                             contentValues.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
                             contentValues.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
-                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues);
+                            sqLiteDatabase.insert(CityContract.CityEntry.TABLE_NAME, null, contentValues);
+
                         }
-                        contentValues = new ContentValues();
                         contentValues.put(CountryContract.CountryEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
-                        context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI, contentValues);
+                        sqLiteDatabase.insert(CountryContract.CountryEntry.TABLE_NAME, null, contentValues);
                     }
 
+                    dbHelper.close();
 
                     String[] projection = {CountryContract.CountryEntry.COLUMN_COUNTRY};
-                    Cursor cursorCountry = context.getContentResolver().query(CountryContract.CountryEntry.CONTENT_URI,
+                    Cursor cursorCountry = sqLiteDatabase.query(CountryContract.CountryEntry.TABLE_NAME,
                             projection,
                             null,
                             null,
-                            null,
-                            null);
+                            null, null, null);
                     for (int l = 0; l < cursorCountry.getCount(); l++) {
                         cursorCountry.moveToNext();
                         countries.add(cursorCountry
@@ -95,10 +101,11 @@ public class CountryRepository {
         String[] projection = {CityContract.CityEntry.COLUMN_CITY};
         String selection = CityContract.CityEntry.COLUMN_COUNTRY + " = ? ";
         String[] selectionArgs = {selectedCountryName};
-        Cursor cursorCity = context.getContentResolver().query(CityContract.CityEntry.CONTENT_URI,
+        Cursor cursorCity = sqLiteDatabase.query(CityContract.CityEntry.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
+                null,
                 null,
                 null);
         for (int i = 0; i < cursorCity.getCount(); i++) {
