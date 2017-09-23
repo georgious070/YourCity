@@ -9,6 +9,7 @@ import android.net.Uri;
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.data.model.Country;
 import com.example.android.yourcity.data.remote.Api;
+import com.example.android.yourcity.ui.home.CallbackCountry;
 import com.example.android.yourcity.ui.home.CityActivity;
 import com.google.gson.Gson;
 
@@ -26,66 +27,84 @@ import retrofit2.Callback;
 
 public class CountryRepository {
 
+    private final Context context;
     private final Api api;
     private List<String> countries;
+    private List<String> cities;
 
     @Inject
-    public CountryRepository(Api api) {
+    public CountryRepository(Context context, Api api) {
         this.api = api;
         countries = new ArrayList<>();
+        cities = new ArrayList<>();
+        this.context = context;
     }
 
-    public List<String> getCountries() {
-        api.getData().enqueue(new Callback<Country>() {
-
+    public void loadDataCountry(final CallbackCountry callback) {
+        api.getData().enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Country> call, retrofit2.Response<Country> response) {
-                Context context = App.getApp().getApplicationContext();
+            public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 String jsonResponse = new Gson().toJson(response.body());
 
                 try {
                     JSONObject jsonObject = new JSONObject(jsonResponse);
-                    JSONArray countriesNames = jsonObject.names();
+                    JSONArray countriesJsonArray = jsonObject.names();
 
                     ContentValues contentValues = new ContentValues();
 
-                    List<String> citiesNames = new ArrayList<String>();
-
-                    for (int i = 0; i < countriesNames.length(); i++) {
-                        JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesNames.get(i));
-                        for(int j = 0; j < citiesJsonArray.length(); j++){
-                            citiesNames.add(citiesJsonArray.getString(j));
-
+                    for (int i = 0; i < countriesJsonArray.length(); i++) {
+                        JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesJsonArray.get(i));
+                        for (int j = 0; j < citiesJsonArray.length(); j++) {
+                            contentValues.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
+                            contentValues.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
+                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues);
                         }
-                        countries.add(countriesNames.get(i).toString());
-                        contentValues.put(CountryContract.CountryEntry.COLUMN_COUNTRY, countries.get(i));
-                        Uri uri = context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI, contentValues);
+                        contentValues = new ContentValues();
+                        contentValues.put(CountryContract.CountryEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
+                        context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI, contentValues);
                     }
 
-//                    List<String> cities = new ArrayList<String>();
-//                    String[] projection = {CountryContract.CountryEntry.COLUMN_COUNTRY};
-//                    Cursor cursorCountry = context.getContentResolver().query(CountryContract.CountryEntry.CONTENT_URI,
-//                            projection,
-//                            null,
-//                            null,
-//                            null,
-//                            null);
-//                    for (int l = 0; l < cursorCountry.getCount(); l++) {
-//                        cursorCountry.moveToNext();
-//                        cities.add(cursorCountry.getString(cursorCountry.getColumnIndex(CountryContract.CountryEntry.COLUMN_COUNTRY)));
-//                    }
 
+                    String[] projection = {CountryContract.CountryEntry.COLUMN_COUNTRY};
+                    Cursor cursorCountry = context.getContentResolver().query(CountryContract.CountryEntry.CONTENT_URI,
+                            projection,
+                            null,
+                            null,
+                            null,
+                            null);
+                    for (int l = 0; l < cursorCountry.getCount(); l++) {
+                        cursorCountry.moveToNext();
+                        countries.add(cursorCountry
+                                .getString(cursorCountry.getColumnIndex(CountryContract.CountryEntry.COLUMN_COUNTRY)));
+                    }
 
+                    callback.onResponse(countries);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<Country> call, Throwable t) {
+            public void onFailure(Call<Object> call, Throwable t) {
                 t.getMessage();
             }
         });
-        return countries;
+    }
+
+    public List<String> getCities(String selectedCountryName) {
+        String[] projection = {CityContract.CityEntry.COLUMN_CITY};
+        String selection = CityContract.CityEntry.COLUMN_COUNTRY + " = ? ";
+        String[] selectionArgs = {selectedCountryName};
+        Cursor cursorCity = context.getContentResolver().query(CityContract.CityEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null);
+        for (int i = 0; i < cursorCity.getCount(); i++) {
+            cursorCity.moveToNext();
+            cities.add(cursorCity.getString(cursorCity.getColumnIndex(CityContract.CityEntry.COLUMN_CITY)));
+        }
+        return cities;
     }
 }

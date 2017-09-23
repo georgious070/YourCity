@@ -13,7 +13,5 @@ import java.util.List;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface CityView extends BaseView {
 
-    void showCountries(List<String> countriesList);
-
-    void showCities(List<String> citiesList);
+    void showCities(List<String> cities);
 }

@@ -7,5 +7,5 @@ import retrofit2.http.GET;
 
 public interface Api {
     @GET("countriesToCities.json")
-    Call<Country> getData();
+    Call<Object> getData();
 }
