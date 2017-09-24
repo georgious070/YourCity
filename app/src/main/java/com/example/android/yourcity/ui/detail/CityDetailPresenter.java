@@ -7,6 +7,8 @@ import com.example.android.yourcity.ui.base.BasePresenter;
 
 import javax.inject.Inject;
 
+import retrofit2.Retrofit;
+
 @InjectViewState
 public class CityDetailPresenter extends BasePresenter<CityDetailView> {
 

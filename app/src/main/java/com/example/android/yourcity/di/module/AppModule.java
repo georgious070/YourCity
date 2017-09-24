@@ -5,8 +5,7 @@ import android.content.Context;
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.data.remote.Api;
 import com.example.android.yourcity.data.remote.ApiXML;
-
-import java.lang.annotation.RetentionPolicy;
+import com.example.android.yourcity.data.repository.CountryRepository;
 
 import javax.inject.Singleton;
 
@@ -59,7 +58,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ApiXML provideApiXML(Retrofit retrofit2){
-        return retrofit2.create(ApiXML.class);
+    ApiXML provideApiXML(Retrofit retrofitXML){
+        return retrofitXML.create(ApiXML.class);
     }
 }
