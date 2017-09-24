@@ -3,6 +3,9 @@ package com.example.android.yourcity;
 import android.app.Application;
 
 import com.example.android.yourcity.data.remote.Api;
+import com.example.android.yourcity.di.component.AppComponent;
+import com.example.android.yourcity.di.component.DaggerAppComponent;
+import com.example.android.yourcity.di.module.AppModule;
 
 import org.json.JSONObject;
 
@@ -11,23 +14,28 @@ import java.net.URL;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+//TODO remove auto import
 public class App extends Application {
-    private static Api api;
-    private Retrofit retrofit;
+
+    private AppComponent appComponent;
+    private static App app;
+
+    public static App getApp() {
+        return app;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://raw.githubusercontent.com/David-Haim/CountriesToCitiesJSON/master/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        api = retrofit.create(Api.class);
+        app = this;
     }
 
-    public static Api getApi() {
-        return api;
+    public AppComponent getComponent() {
+        if (appComponent == null) {
+            appComponent = DaggerAppComponent.builder()
+                    .appModule(new AppModule(this))
+                    .build();
+        }
+        return appComponent;
     }
 }
