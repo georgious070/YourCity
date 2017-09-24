@@ -13,6 +13,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.android.yourcity.R;
 import com.example.android.yourcity.ui.base.BaseActivity;
+import com.example.android.yourcity.ui.detail.CityDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,7 @@ public class CityActivity extends BaseActivity implements CityView,
 
     @Override
     public void onClickCity(String cityName) {
-        //TODO from CityActivity -> CityDetailActivity
+  //      startActivity(CityDetailActivity.getIntent(this,));
     }
 
     @Override

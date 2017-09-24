@@ -1,23 +1,19 @@
 package com.example.android.yourcity.data.model.xml;
 
 
-public class CityXML
-{
+public class CityXML {
     private Geonames geonames;
 
-    public Geonames getGeonames ()
-    {
+    public Geonames getGeonames() {
         return geonames;
     }
 
-    public void setGeonames (Geonames geonames)
-    {
+    public void setGeonames(Geonames geonames) {
         this.geonames = geonames;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [geonames = "+geonames+"]";
+    public String toString() {
+        return "ClassPojo [geonames = " + geonames + "]";
     }
 }
