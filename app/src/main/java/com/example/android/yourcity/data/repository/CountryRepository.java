@@ -3,15 +3,11 @@ package com.example.android.yourcity.data.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
-import android.net.Uri;
 
-import com.example.android.yourcity.App;
-import com.example.android.yourcity.data.model.Country;
+import com.example.android.yourcity.data.model.xml.Entry;
 import com.example.android.yourcity.data.remote.Api;
+import com.example.android.yourcity.data.remote.ApiXML;
 import com.example.android.yourcity.ui.home.CallbackCountry;
-import com.example.android.yourcity.ui.home.CityActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -25,19 +21,21 @@ import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-
-import static com.example.android.yourcity.data.repository.CountryContract.CountryEntry.TABLE_NAME;
+import retrofit2.Response;
 
 public class CountryRepository {
 
     private final Context context;
     private final Api api;
+    private final ApiXML apiXML;
     private List<String> countries;
     private List<String> cities;
+    private String cityDescription;
 
     @Inject
-    public CountryRepository(Context context, Api api) {
+    public CountryRepository(Context context, Api api, ApiXML apiXML) {
         this.api = api;
+        this.apiXML = apiXML;
         countries = new ArrayList<>();
         cities = new ArrayList<>();
         this.context = context;
@@ -106,5 +104,21 @@ public class CountryRepository {
             cities.add(cursorCity.getString(cursorCity.getColumnIndex(CityContract.CityEntry.COLUMN_CITY)));
         }
         return cities;
+    }
+
+
+    public String getCityDescription(String selectedCityName){
+        apiXML.getCityDescription(selectedCityName, 1, "demo").enqueue(new Callback<Entry>() {
+            @Override
+            public void onResponse(Call<Entry> call, Response<Entry> response) {
+                cityDescription = response.body().getSummary();
+            }
+
+            @Override
+            public void onFailure(Call<Entry> call, Throwable t) {
+
+            }
+        });
+        return cityDescription;
     }
 }
