@@ -1,5 +1,6 @@
 package com.example.android.yourcity.busines;
 
+import com.example.android.yourcity.data.model.json.Country;
 import com.example.android.yourcity.data.repository.CountryRepository;
 import com.example.android.yourcity.ui.home.CallbackCountry;
 
@@ -22,5 +23,9 @@ public class CountryInteractor {
 
     public List<String> getCities(String selectedCountryName){
         return countryRepository.getCities(selectedCountryName);
+    }
+
+    public String getCityDescription(String selectedCityName){
+        return countryRepository.getCityDescription(selectedCityName);
     }
 }

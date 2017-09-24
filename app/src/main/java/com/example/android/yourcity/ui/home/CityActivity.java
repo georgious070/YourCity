@@ -65,10 +65,9 @@ public class CityActivity extends BaseActivity implements CityView,
         recyclerView.setAdapter(citiesAdapter);
     }
 
-
     @Override
     public void onClickCity(String cityName) {
-  //      startActivity(CityDetailActivity.getIntent(this,));
+        startActivity(CityDetailActivity.getIntent(this, cityName));
     }
 
     @Override

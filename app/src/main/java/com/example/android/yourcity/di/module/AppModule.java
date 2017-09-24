@@ -59,7 +59,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ApiXML provideApiXML(Retrofit retrofit){
-        return retrofit.create(ApiXML.class);
+    ApiXML provideApiXML(Retrofit retrofit2){
+        return retrofit2.create(ApiXML.class);
     }
 }

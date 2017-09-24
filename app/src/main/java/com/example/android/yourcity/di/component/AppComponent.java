@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.di.module.AppModule;
+import com.example.android.yourcity.ui.detail.CityDetailPresenter;
 import com.example.android.yourcity.ui.home.CityPresenter;
 
 import javax.inject.Singleton;
@@ -19,4 +20,6 @@ public interface AppComponent {
     void inject(App app);
 
     void inject(CityPresenter cityPresenter);
+
+    void inject(CityDetailPresenter cityDetailPresenter);
 }
