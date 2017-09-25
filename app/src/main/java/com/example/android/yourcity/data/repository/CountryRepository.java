@@ -14,12 +14,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import okio.Utf8;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,23 +50,24 @@ public class CountryRepository {
         api.getData().enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, @Named("retrofitJSON") retrofit2.Response<Object> response) {
-
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     JSONArray countriesJsonArray = jsonObject.names();
 
                     ContentValues contentValues = new ContentValues();
+                    ContentValues contentValues2 = new ContentValues();
 
-
-                    for (int i = 0; i < countriesJsonArray.length(); i++) {
+                    for (int i = 0; i < 5; i++) {
                         JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesJsonArray.get(i));
-                        for (int j = 0; j < citiesJsonArray.length(); j++) {
-                            contentValues.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
-                            contentValues.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
-                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues);
+                        for (int j = 0; j < 5; j++) {
+                            contentValues2.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
+                            contentValues2.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
+                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues2);
                         }
+                        contentValues2 = new ContentValues();
                         contentValues.put(CountryContract.CountryEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
                         context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI,contentValues);
+                        contentValues = new ContentValues();
                     }
 
                     String[] projection = {CountryContract.CountryEntry.COLUMN_COUNTRY};
@@ -109,10 +113,11 @@ public class CountryRepository {
         return cities;
     }
 
+    public String getCityDescription(String selectedCityName) {
 
-    public String getCityDescription(String selectedCityName){
-        String lower = selectedCityName.toLowerCase();
-        apiXML.getCityDescription(lower,10, "demo").enqueue(new Callback<Entry>() {
+        String lowerCase = selectedCityName.toLowerCase();
+        byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
+        apiXML.getCityDescription(encode,10, "demo").enqueue(new Callback<Entry>() {
             @Override
             public void onResponse(Call<Entry> call,@Named("retrofitXML") retrofit2.Response<Entry> response) {
                 cityDescription = response.body().getSummary();

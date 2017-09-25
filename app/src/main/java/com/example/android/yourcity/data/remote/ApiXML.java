@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 public interface ApiXML {
 
     @GET("wikipediaSearch")
-    Call<Entry> getCityDescription(@Query("q") String query,
+    Call<Entry> getCityDescription(@Query("q") byte[] query,
                                    @Query("maxRows") int maxRows,
                                    @Query("username") String username);
 }

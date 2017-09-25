@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class CityActivity extends BaseActivity implements CityView,
         @Override
         public void onResponse(List<String> countries) {
             countrySpinnerAdapter.setData(countries);
+            progressBar.setVisibility(View.GONE);
         }
     };
 
@@ -35,6 +37,7 @@ public class CityActivity extends BaseActivity implements CityView,
     private CitiesAdapter citiesAdapter;
     private Spinner spinner;
     private CountrySpinnerAdapter countrySpinnerAdapter;
+    private ProgressBar progressBar;
 
     @ProvidePresenter
     CityPresenter providePresenter() {
@@ -46,7 +49,10 @@ public class CityActivity extends BaseActivity implements CityView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinner = (Spinner) findViewById(R.id.spinner);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+
+                spinner = (Spinner) findViewById(R.id.spinner);
         countrySpinnerAdapter = new CountrySpinnerAdapter(this, R.layout.spinner_item, new ArrayList<String>());
         spinner.setAdapter(countrySpinnerAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

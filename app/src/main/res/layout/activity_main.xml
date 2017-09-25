@@ -6,10 +6,19 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.yourcity.ui.home.CityActivity">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_gravity="center_horizontal"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+
 
         <Spinner
             android:id="@+id/spinner"
