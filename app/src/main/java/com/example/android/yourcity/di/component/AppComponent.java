@@ -21,4 +21,8 @@ public interface AppComponent {
     void inject(CityPresenter cityPresenter);
 
     void inject(CityDetailPresenter cityDetailPresenter);
+
+    void inject(CountryInteractor countryInteractor);
+
+
 }

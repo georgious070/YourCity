@@ -6,6 +6,7 @@ import com.example.android.yourcity.busines.CountryInteractor;
 import com.example.android.yourcity.ui.base.BasePresenter;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import retrofit2.Retrofit;
 
@@ -14,6 +15,7 @@ public class CityDetailPresenter extends BasePresenter<CityDetailView> {
 
     @Inject
     CountryInteractor countryInteractor;
+
     private String selectedCityName;
 
     public CityDetailPresenter(String selectedCityName) {

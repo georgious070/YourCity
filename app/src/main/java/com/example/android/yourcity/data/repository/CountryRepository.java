@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,13 +46,14 @@ public class CountryRepository {
     public void loadDataCountry(final CallbackCountry callback) {
         api.getData().enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
+            public void onResponse(Call<Object> call, @Named("retrofitJSON") retrofit2.Response<Object> response) {
 
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     JSONArray countriesJsonArray = jsonObject.names();
 
                     ContentValues contentValues = new ContentValues();
+
 
                     for (int i = 0; i < countriesJsonArray.length(); i++) {
                         JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesJsonArray.get(i));
@@ -109,9 +111,10 @@ public class CountryRepository {
 
 
     public String getCityDescription(String selectedCityName){
-        apiXML.getCityDescription(selectedCityName, 1, "demo").enqueue(new Callback<Entry>() {
+        String lower = selectedCityName.toLowerCase();
+        apiXML.getCityDescription(lower,10, "demo").enqueue(new Callback<Entry>() {
             @Override
-            public void onResponse(Call<Entry> call, Response<Entry> response) {
+            public void onResponse(Call<Entry> call,@Named("retrofitXML") retrofit2.Response<Entry> response) {
                 cityDescription = response.body().getSummary();
             }
 
