@@ -4,8 +4,7 @@ import android.content.Context;
 
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.data.remote.Api;
-import com.example.android.yourcity.data.remote.ApiXML;
-import com.example.android.yourcity.data.repository.CountryRepository;
+import com.example.android.yourcity.data.remote.ApiDesc;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -53,14 +52,13 @@ public class AppModule {
     Retrofit provideRetrofitXML(){
         return new Retrofit.Builder()
                 .baseUrl("http://api.geonames.org/")
-                .client(new OkHttpClient())
-                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
     @Provides
     @Singleton
-    ApiXML provideApiXML(@Named("retrofitXML")Retrofit retrofitXML){
-        return retrofitXML.create(ApiXML.class);
+    ApiDesc provideApiXML(@Named("retrofitXML")Retrofit retrofitXML){
+        return retrofitXML.create(ApiDesc.class);
     }
 }

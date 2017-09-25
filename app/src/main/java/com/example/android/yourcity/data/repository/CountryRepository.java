@@ -4,9 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.android.yourcity.data.model.xml.Entry;
+
+import com.example.android.yourcity.data.model.xml.example.Status;
 import com.example.android.yourcity.data.remote.Api;
-import com.example.android.yourcity.data.remote.ApiXML;
+import com.example.android.yourcity.data.remote.ApiDesc;
 import com.example.android.yourcity.ui.home.CallbackCountry;
 import com.google.gson.Gson;
 
@@ -14,7 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,25 +22,22 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import okio.Utf8;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class CountryRepository {
 
     private final Context context;
     private final Api api;
-    private final ApiXML apiXML;
+    private final ApiDesc apiDesc;
     private List<String> countries;
     private List<String> cities;
     private String cityDescription;
 
     @Inject
-    public CountryRepository(Context context, Api api, ApiXML apiXML) {
+    public CountryRepository(Context context, Api api, ApiDesc apiDesc) {
         this.api = api;
-        this.apiXML = apiXML;
+        this.apiDesc = apiDesc;
         countries = new ArrayList<>();
         cities = new ArrayList<>();
         this.context = context;
@@ -117,14 +114,24 @@ public class CountryRepository {
 
         String lowerCase = selectedCityName.toLowerCase();
         byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
-        apiXML.getCityDescription(encode,10, "demo").enqueue(new Callback<Entry>() {
+        apiDesc.getCityDescription(encode,1, "demo").enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Entry> call,@Named("retrofitXML") retrofit2.Response<Entry> response) {
-                cityDescription = response.body().getSummary();
+            public void onResponse(Call<Object> call, @Named("retrofitXML") retrofit2.Response<Object> response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+//                    cityDescription = jsonObject.getString("message");
+                    JSONArray jsonArray =jsonObject.names();
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(1);
+                    cityDescription = jsonObject.getString("summary");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
-            public void onFailure(Call<Entry> call, Throwable t) {
+            public void onFailure(Call<Object> call, Throwable t) {
 
             }
         });
