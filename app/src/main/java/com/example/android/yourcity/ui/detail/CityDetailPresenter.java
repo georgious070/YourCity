@@ -3,6 +3,7 @@ package com.example.android.yourcity.ui.detail;
 import com.arellomobile.mvp.InjectViewState;
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.busines.CountryInteractor;
+import com.example.android.yourcity.data.remote.ApiDesc;
 import com.example.android.yourcity.ui.base.BasePresenter;
 
 import javax.inject.Inject;
@@ -14,7 +15,9 @@ import retrofit2.Retrofit;
 public class CityDetailPresenter extends BasePresenter<CityDetailView> {
 
     @Inject
+    @ApiDesc Retrofit retrofit2;
     CountryInteractor countryInteractor;
+
 
     private String selectedCityName;
 

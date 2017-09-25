@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.data.remote.Api;
+import com.example.android.yourcity.data.remote.Api2;
 import com.example.android.yourcity.data.remote.ApiDesc;
+import com.example.android.yourcity.data.remote.ApiDesc2;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -31,8 +33,9 @@ public class AppModule {
         return context;
     }
 
-    @Provides @Named("retrofitJSON")
+    @Provides
     @Singleton
+    @Api
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl("https://raw.githubusercontent.com/David-Haim/CountriesToCitiesJSON/master/")
@@ -43,12 +46,14 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Api provideApi(@Named("retrofitJSON") Retrofit retrofit){
-        return retrofit.create(Api.class);
+    Api2 provideApi(@Named("retrofit1") Retrofit retrofit){
+        return retrofit.create(Api2.class);
     }
 
-    @Provides @Named("retrofitXML")
+
+    @Provides
     @Singleton
+    @ApiDesc
     Retrofit provideRetrofitXML(){
         return new Retrofit.Builder()
                 .baseUrl("http://api.geonames.org/")
@@ -58,7 +63,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ApiDesc provideApiXML(@Named("retrofitXML")Retrofit retrofitXML){
-        return retrofitXML.create(ApiDesc.class);
+    ApiDesc2 provideApiXML(@Named("retrofit2")Retrofit retrofitXML){
+        return retrofitXML.create(ApiDesc2.class);
     }
 }

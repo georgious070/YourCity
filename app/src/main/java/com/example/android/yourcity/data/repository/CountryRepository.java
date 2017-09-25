@@ -7,7 +7,10 @@ import android.database.Cursor;
 
 import com.example.android.yourcity.data.model.xml.example.Status;
 import com.example.android.yourcity.data.remote.Api;
+import com.example.android.yourcity.data.remote.Api2;
 import com.example.android.yourcity.data.remote.ApiDesc;
+import com.example.android.yourcity.data.remote.ApiDesc2;
+import com.example.android.yourcity.di.module.AppModule;
 import com.example.android.yourcity.ui.home.CallbackCountry;
 import com.google.gson.Gson;
 
@@ -28,14 +31,14 @@ import retrofit2.Callback;
 public class CountryRepository {
 
     private final Context context;
-    private final Api api;
-    private final ApiDesc apiDesc;
+    private final Api2 api;
+    private final ApiDesc2 apiDesc;
     private List<String> countries;
     private List<String> cities;
     private String cityDescription;
 
     @Inject
-    public CountryRepository(Context context, Api api, ApiDesc apiDesc) {
+    public CountryRepository(Context context, Api2 api, ApiDesc2 apiDesc) {
         this.api = api;
         this.apiDesc = apiDesc;
         countries = new ArrayList<>();
@@ -46,7 +49,7 @@ public class CountryRepository {
     public void loadDataCountry(final CallbackCountry callback) {
         api.getData().enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Object> call, @Named("retrofitJSON") retrofit2.Response<Object> response) {
+            public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     JSONArray countriesJsonArray = jsonObject.names();
@@ -111,12 +114,11 @@ public class CountryRepository {
     }
 
     public String getCityDescription(String selectedCityName) {
-
         String lowerCase = selectedCityName.toLowerCase();
         byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
         apiDesc.getCityDescription(encode,1, "demo").enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Object> call, @Named("retrofitXML") retrofit2.Response<Object> response) {
+            public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
 
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
