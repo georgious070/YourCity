@@ -4,17 +4,15 @@ import android.content.Context;
 
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.data.remote.Api;
-import com.example.android.yourcity.data.remote.ApiXML;
-import com.example.android.yourcity.data.repository.CountryRepository;
+import com.example.android.yourcity.data.remote.Api2;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 @Module
 public class AppModule {
@@ -31,7 +29,7 @@ public class AppModule {
         return context;
     }
 
-    @Provides
+    @Provides@Named("retrofit1")
     @Singleton
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
@@ -40,25 +38,26 @@ public class AppModule {
                 .build();
     }
 
-    @Provides
-    @Singleton
-    Api provideApi(Retrofit retrofit){
-        return retrofit.create(Api.class);
-    }
 
     @Provides
     @Singleton
-    Retrofit provideRetrofitXML(){
+    Api provideApi(@Named("retrofit1") Retrofit retrofit){
+        return retrofit.create(Api.class);
+    }
+
+
+    @Provides@Named("retrofit2")
+    @Singleton
+    Retrofit provideRetrofit2(){
         return new Retrofit.Builder()
                 .baseUrl("http://api.geonames.org/")
-                .client(new OkHttpClient())
-                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
     @Provides
     @Singleton
-    ApiXML provideApiXML(Retrofit retrofitXML){
-        return retrofitXML.create(ApiXML.class);
+    Api2 provideApi2(@Named("retrofit2")Retrofit retrofitXML){
+        return retrofitXML.create(Api2.class);
     }
 }

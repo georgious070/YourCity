@@ -22,7 +22,7 @@
         <activity android:name=".ui.detail.CityDetailActivity"></activity>
 
         <provider
-            android:name=".data.repository.YourCityProvider"
+            android:name=".data.database.YourCityProvider"
             android:authorities="com.example.android.mydb"
             android:exported="false" />
     </application>

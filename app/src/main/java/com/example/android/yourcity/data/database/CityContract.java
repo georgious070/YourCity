@@ -1,4 +1,4 @@
-package com.example.android.yourcity.data.repository;
+package com.example.android.yourcity.data.database;
 
 import android.content.ContentResolver;
 import android.net.Uri;

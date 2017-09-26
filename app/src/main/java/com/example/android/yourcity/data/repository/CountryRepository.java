@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.android.yourcity.data.model.xml.Entry;
+
+import com.example.android.yourcity.data.database.CityContract;
+import com.example.android.yourcity.data.database.CountryContract;
 import com.example.android.yourcity.data.remote.Api;
-import com.example.android.yourcity.data.remote.ApiXML;
+import com.example.android.yourcity.data.remote.Api2;
 import com.example.android.yourcity.ui.home.CallbackCountry;
 import com.google.gson.Gson;
 
@@ -14,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,21 +25,20 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class CountryRepository {
 
     private final Context context;
     private final Api api;
-    private final ApiXML apiXML;
+    private final Api2 apiDesc;
     private List<String> countries;
     private List<String> cities;
     private String cityDescription;
 
     @Inject
-    public CountryRepository(Context context, Api api, ApiXML apiXML) {
+    public CountryRepository(Context context, Api api, Api2 apiDesc) {
         this.api = api;
-        this.apiXML = apiXML;
+        this.apiDesc = apiDesc;
         countries = new ArrayList<>();
         cities = new ArrayList<>();
         this.context = context;
@@ -46,22 +48,24 @@ public class CountryRepository {
         api.getData().enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
-
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     JSONArray countriesJsonArray = jsonObject.names();
 
                     ContentValues contentValues = new ContentValues();
+                    ContentValues contentValues2 = new ContentValues();
 
-                    for (int i = 0; i < countriesJsonArray.length(); i++) {
+                    for (int i = 0; i < 5; i++) {
                         JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesJsonArray.get(i));
-                        for (int j = 0; j < citiesJsonArray.length(); j++) {
-                            contentValues.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
-                            contentValues.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
-                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues);
+                        for (int j = 0; j < 5; j++) {
+                            contentValues2.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
+                            contentValues2.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
+                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues2);
                         }
+                        contentValues2 = new ContentValues();
                         contentValues.put(CountryContract.CountryEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
-                        context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI,contentValues);
+                        context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI, contentValues);
+                        contentValues = new ContentValues();
                     }
 
                     String[] projection = {CountryContract.CountryEntry.COLUMN_COUNTRY};
@@ -107,16 +111,26 @@ public class CountryRepository {
         return cities;
     }
 
-
-    public String getCityDescription(String selectedCityName){
-        apiXML.getCityDescription(selectedCityName, 1, "demo").enqueue(new Callback<Entry>() {
+    public String getCityDescription(String selectedCityName) {
+        String lowerCase = selectedCityName.toLowerCase();
+        byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
+        apiDesc.getCityDescription(encode, 1, "demo").enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Entry> call, Response<Entry> response) {
-                cityDescription = response.body().getSummary();
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    JSONArray jsonArray = jsonObject.names();
+                    JSONObject jsonObject1 = jsonObject.getJSONObject((String) jsonArray.get(0));
+                    JSONArray jsonArray1 = jsonObject1.names();
+                    String message = jsonObject1.getString((String) jsonArray1.get(0));
+                    cityDescription = message;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
             @Override
-            public void onFailure(Call<Entry> call, Throwable t) {
+            public void onFailure(Call<Object> call, Throwable t) {
 
             }
         });

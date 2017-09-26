@@ -12,6 +12,7 @@ import retrofit2.Retrofit;
 @InjectViewState
 public class CityDetailPresenter extends BasePresenter<CityDetailView> {
 
+
     @Inject
     CountryInteractor countryInteractor;
     private String selectedCityName;
