@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.data.remote.ApiCityDescription;
 import com.example.android.yourcity.data.remote.ApiGeonames;
+import com.example.android.yourcity.utils.Constants;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -17,10 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class AppModule {
 
-    private final String CITY_DESCRIPTION_BASE_URL = "http://api.geonames.org/";
-    private final String GEONAMES_BASE_URL = "https://raw.githubusercontent.com/David-Haim/CountriesToCitiesJSON/master/";
-    private final Context context;
-
+   private final Context context;
     public AppModule(App app) {
         context = app;
     }
@@ -36,7 +34,7 @@ public class AppModule {
     @Singleton
     Retrofit provideRetrofitGeonames() {
         return new Retrofit.Builder()
-                .baseUrl(GEONAMES_BASE_URL)
+                .baseUrl(Constants.GEONAMES_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
@@ -54,7 +52,7 @@ public class AppModule {
     @Singleton
     Retrofit provideRetrofitDescription() {
         return new Retrofit.Builder()
-                .baseUrl(CITY_DESCRIPTION_BASE_URL)
+                .baseUrl(Constants.CITY_DESCRIPTION_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

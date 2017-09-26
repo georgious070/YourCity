@@ -55,20 +55,20 @@ public class CountryRepository {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     JSONArray countriesJsonArray = jsonObject.names();
 
-                    ContentValues contentValues = new ContentValues();
-                    ContentValues contentValues2 = new ContentValues();
+                    ContentValues contentValuesCountry = new ContentValues();
+                    ContentValues contentValuesCity = new ContentValues();
 
                     for (int i = 0; i < countriesJsonArray.length(); i++) {
                         JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesJsonArray.get(i));
                         for (int j = 0; j < citiesJsonArray.length(); j++) {
-                            contentValues2.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
-                            contentValues2.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
-                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues2);
+                            contentValuesCity.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
+                            contentValuesCity.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
+                            context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValuesCity);
                         }
-                        contentValues2 = new ContentValues();
-                        contentValues.put(CountryContract.CountryEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
-                        context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI, contentValues);
-                        contentValues = new ContentValues();
+                        contentValuesCity = new ContentValues();
+                        contentValuesCountry.put(CountryContract.CountryEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
+                        context.getContentResolver().insert(CountryContract.CountryEntry.CONTENT_URI, contentValuesCountry);
+                        contentValuesCountry = new ContentValues();
                     }
 
                     String[] projection = {CountryContract.CountryEntry.COLUMN_COUNTRY};
