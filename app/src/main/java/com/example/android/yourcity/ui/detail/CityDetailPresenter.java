@@ -12,9 +12,10 @@ import javax.security.auth.callback.Callback;
 public class CityDetailPresenter extends BasePresenter<CityDetailView> {
 
     private final CallbackCity callbackCity;
+    private final String selectedCityName;
+
     @Inject
     CountryInteractor countryInteractor;
-    private String selectedCityName;
 
     public CityDetailPresenter(String selectedCityName, CallbackCity callbackCity) {
         App.getApp().getComponent().inject(this);

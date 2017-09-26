@@ -3,5 +3,7 @@ package com.example.android.yourcity.ui.detail;
 //TODO ?
 public interface CallbackCity {
 
-    void onResponse(String cityDescription);
+    void onSuccess(String cityDescription);
+
+    void onFailure(String errorMessage);
 }

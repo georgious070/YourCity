@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/androidstudio
+# Created by https://www.gitignore.io/apiGeonames/androidstudio
 
 ### AndroidStudio ###
 # Covers files to be ignored for android development using Android Studio.
@@ -127,4 +127,4 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-# End of https://www.gitignore.io/api/androidstudio
+# End of https://www.gitignore.io/apiGeonames/androidstudio

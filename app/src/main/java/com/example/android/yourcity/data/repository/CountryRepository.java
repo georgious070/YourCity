@@ -7,8 +7,8 @@ import android.database.Cursor;
 
 import com.example.android.yourcity.data.database.CityContract;
 import com.example.android.yourcity.data.database.CountryContract;
-import com.example.android.yourcity.data.remote.Api;
-import com.example.android.yourcity.data.remote.Api2;
+import com.example.android.yourcity.data.remote.ApiCityDescription;
+import com.example.android.yourcity.data.remote.ApiGeonames;
 import com.example.android.yourcity.ui.detail.CallbackCity;
 import com.example.android.yourcity.ui.home.CallbackCountry;
 import com.google.gson.Gson;
@@ -30,23 +30,23 @@ import retrofit2.Response;
 public class CountryRepository {
 
     private final Context context;
-    private final Api api;
-    private final Api2 apiDesc;
+    private final ApiGeonames apiGeonames;
+    private final ApiCityDescription apiDesc;
     private List<String> countries;
     private List<String> cities;
     private String cityDescription;
 
     @Inject
-    public CountryRepository(Context context, Api api, Api2 api2) {
-        this.api = api;
-        this.apiDesc = api2;
-        countries = new ArrayList<>();
-        cities = new ArrayList<>();
+    public CountryRepository(Context context, ApiGeonames apiGeonames, ApiCityDescription apiCityDescription) {
+        this.apiGeonames = apiGeonames;
+        this.apiDesc = apiCityDescription;
+        this.countries = new ArrayList<>();
+        this.cities = new ArrayList<>();
         this.context = context;
     }
 
     public void loadDataCountry(final CallbackCountry callbackCountry) {
-        api.getData().enqueue(new Callback<Object>() {
+        apiGeonames.getData().enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 try {
@@ -82,7 +82,7 @@ public class CountryRepository {
                                 .getString(cursorCountry.getColumnIndex(CountryContract.CountryEntry.COLUMN_COUNTRY)));
                     }
 
-                    callbackCountry.onResponse(countries);
+                    callbackCountry.onSuccess(countries);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -90,7 +90,7 @@ public class CountryRepository {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                t.getMessage();
+                callbackCountry.onFailure(t.getMessage());
             }
         });
     }
@@ -116,7 +116,7 @@ public class CountryRepository {
         return cities;
     }
 
-    public void loadCityDescription(CallbackCity callbackCity, String selectedCityName) {
+    public void loadCityDescription(CallbackCity callbackCityDescription, String selectedCityName) {
         String lowerCase = selectedCityName.toLowerCase();
         byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
         apiDesc.getCityDescription(encode, 1, "demo").enqueue(new Callback<Object>() {
@@ -125,19 +125,22 @@ public class CountryRepository {
 
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    JSONArray jsonArray = jsonObject.names();
-                    JSONObject jsonObject1 = jsonObject.getJSONObject((String) jsonArray.get(0));
-                    JSONArray jsonArray1 = jsonObject1.names();
-                    String message = jsonObject1.getString((String) jsonArray1.get(0));
+                    JSONArray jsonArrayGeonames = jsonObject.names();
+                    JSONArray jsonArrayGeonamesFirstArray = jsonObject.getJSONArray((String) jsonArrayGeonames.get(0));
+                    JSONObject jsonObjectInsideFirstGeonames = jsonArrayGeonamesFirstArray.getJSONObject(0);
+                    String message = jsonObjectInsideFirstGeonames.getString("summary");
+
                     cityDescription = message;
-                    callbackCity.onResponse(cityDescription);
+                    callbackCityDescription.onSuccess(cityDescription);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    callbackCityDescription.onFailure("Daily limit of 30 000 credits has already been exceeded." +
+                            " A lot of regards, Wikipedia");
                 }
             }
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                callbackCityDescription.onFailure(t.getMessage());
             }
         });
     }

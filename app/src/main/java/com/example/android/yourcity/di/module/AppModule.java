@@ -3,8 +3,8 @@ package com.example.android.yourcity.di.module;
 import android.content.Context;
 
 import com.example.android.yourcity.App;
-import com.example.android.yourcity.data.remote.Api;
-import com.example.android.yourcity.data.remote.Api2;
+import com.example.android.yourcity.data.remote.ApiCityDescription;
+import com.example.android.yourcity.data.remote.ApiGeonames;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -42,8 +42,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Api provideApi(@Named("retrofit1") Retrofit retrofit){
-        return retrofit.create(Api.class);
+    ApiGeonames provideApi(@Named("retrofit1") Retrofit retrofit){
+        return retrofit.create(ApiGeonames.class);
     }
 
 
@@ -59,7 +59,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Api2 provideApi2(@Named("retrofit2")Retrofit retrofitXML){
-        return retrofitXML.create(Api2.class);
+    ApiCityDescription provideApi2(@Named("retrofit2")Retrofit retrofitXML){
+        return retrofitXML.create(ApiCityDescription.class);
     }
 }

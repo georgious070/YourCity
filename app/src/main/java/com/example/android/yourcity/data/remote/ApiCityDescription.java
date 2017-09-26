@@ -7,7 +7,7 @@ import retrofit2.http.Query;
 
 //http://api.geonames.org/wikipediaSearch?q=london&maxRows=10&username=demo
 
-public interface Api2 {
+public interface ApiCityDescription {
 
     @GET("wikipediaSearchJSON")
     Call<Object> getCityDescription(@Query("q") byte[] query,

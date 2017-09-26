@@ -21,19 +21,25 @@ import java.util.List;
 public class CityActivity extends BaseActivity implements CityView,
         CitiesAdapter.OnCityClickListener {
 
-    private final CallbackCountry callbackCountry = new CallbackCountry() {
-        @Override
-        public void onResponse(List<String> countries) {
-            countrySpinnerAdapter.setData(countries);
-        }
-    };
-
     @InjectPresenter
     CityPresenter cityPresenter;
     private RecyclerView recyclerView;
     private CitiesAdapter citiesAdapter;
     private Spinner spinner;
     private CountrySpinnerAdapter countrySpinnerAdapter;
+    private final CallbackCountry callbackCountry = new CallbackCountry() {
+        @Override
+        public void onSuccess(List<String> countries) {
+            countrySpinnerAdapter.setData(countries);
+            showProgress(false);
+        }
+
+        @Override
+        public void onFailure(String errorMessage) {
+            Toast.makeText(CityActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            showProgress(false);
+        }
+    };
 
     @ProvidePresenter
     CityPresenter providePresenter() {
@@ -44,6 +50,8 @@ public class CityActivity extends BaseActivity implements CityView,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        showProgress(true);
 
         spinner = (Spinner) findViewById(R.id.spinner);
         countrySpinnerAdapter = new CountrySpinnerAdapter(this, R.layout.spinner_item, new ArrayList<String>());
@@ -61,8 +69,13 @@ public class CityActivity extends BaseActivity implements CityView,
         });
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_cities);
-        citiesAdapter = new CitiesAdapter(new ArrayList<String>(), this);
+        citiesAdapter = new CitiesAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(citiesAdapter);
+    }
+
+    @Override
+    public void showProgress(boolean inProgress) {
+        super.showProgress(inProgress);
     }
 
     @Override
