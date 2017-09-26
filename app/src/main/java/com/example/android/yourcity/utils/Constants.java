@@ -6,4 +6,8 @@ public final class Constants {
 
     public static final String GEONAMES_BASE_URL = "https://raw.githubusercontent.com/David-Haim/CountriesToCitiesJSON/master/";
 
+    public static final String WIKIPEDIA_USER_NAME = "demo";
+
+    public static final String JSON_CITY_DESCRIPTION_KEY = "summary";
+
 }

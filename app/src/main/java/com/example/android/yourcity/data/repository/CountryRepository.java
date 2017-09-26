@@ -10,6 +10,7 @@ import com.example.android.yourcity.data.remote.ApiCityDescription;
 import com.example.android.yourcity.data.remote.ApiGeonames;
 import com.example.android.yourcity.ui.detail.CallbackCity;
 import com.example.android.yourcity.ui.home.CallbackCountry;
+import com.example.android.yourcity.utils.Constants;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -28,8 +29,7 @@ import retrofit2.Response;
 
 public class CountryRepository {
 
-    private static final String WIKIPEDIA_USER_NAME = "demo";
-    private static final String JSON_CITY_DESCRIPTION_KEY = "summary";
+
     private final Context context;
     private final ApiGeonames apiGeonames;
     private final ApiCityDescription apiDesc;
@@ -120,7 +120,7 @@ public class CountryRepository {
     public void loadCityDescription(CallbackCity callbackCityDescription, String selectedCityName) {
         String lowerCase = selectedCityName.toLowerCase();
         byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
-        apiDesc.getCityDescription(encode, 1, WIKIPEDIA_USER_NAME).enqueue(new Callback<Object>() {
+        apiDesc.getCityDescription(encode, 1, Constants.WIKIPEDIA_USER_NAME).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
 
@@ -129,7 +129,7 @@ public class CountryRepository {
                     JSONArray jsonArrayGeonames = jsonObject.names();
                     JSONArray jsonArrayGeonamesFirstArray = jsonObject.getJSONArray((String) jsonArrayGeonames.get(0));
                     JSONObject jsonObjectInsideFirstGeonames = jsonArrayGeonamesFirstArray.getJSONObject(0);
-                    String message = jsonObjectInsideFirstGeonames.getString(JSON_CITY_DESCRIPTION_KEY);
+                    String message = jsonObjectInsideFirstGeonames.getString(Constants.JSON_CITY_DESCRIPTION_KEY);
                     cityDescription = message;
                     callbackCityDescription.onSuccess(cityDescription);
                 } catch (JSONException e) {
