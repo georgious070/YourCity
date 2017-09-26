@@ -29,7 +29,8 @@ public class AppModule {
         return context;
     }
 
-    @Provides@Named("retrofit1")
+    @Provides
+    @Named("retrofit1")
     @Singleton
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
@@ -46,7 +47,8 @@ public class AppModule {
     }
 
 
-    @Provides@Named("retrofit2")
+    @Provides
+    @Named("retrofit2")
     @Singleton
     Retrofit provideRetrofit2(){
         return new Retrofit.Builder()

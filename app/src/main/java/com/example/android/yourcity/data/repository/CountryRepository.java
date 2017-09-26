@@ -9,6 +9,7 @@ import com.example.android.yourcity.data.database.CityContract;
 import com.example.android.yourcity.data.database.CountryContract;
 import com.example.android.yourcity.data.remote.Api;
 import com.example.android.yourcity.data.remote.Api2;
+import com.example.android.yourcity.ui.detail.CallbackCity;
 import com.example.android.yourcity.ui.home.CallbackCountry;
 import com.google.gson.Gson;
 
@@ -36,15 +37,15 @@ public class CountryRepository {
     private String cityDescription;
 
     @Inject
-    public CountryRepository(Context context, Api api, Api2 apiDesc) {
+    public CountryRepository(Context context, Api api, Api2 api2) {
         this.api = api;
-        this.apiDesc = apiDesc;
+        this.apiDesc = api2;
         countries = new ArrayList<>();
         cities = new ArrayList<>();
         this.context = context;
     }
 
-    public void loadDataCountry(final CallbackCountry callback) {
+    public void loadDataCountry(final CallbackCountry callbackCountry) {
         api.getData().enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
@@ -81,7 +82,7 @@ public class CountryRepository {
                                 .getString(cursorCountry.getColumnIndex(CountryContract.CountryEntry.COLUMN_COUNTRY)));
                     }
 
-                    callback.onResponse(countries);
+                    callbackCountry.onResponse(countries);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -104,6 +105,10 @@ public class CountryRepository {
                 selectionArgs,
                 null,
                 null);
+
+        if(cities!=null){
+            cities.clear();
+        }
         for (int i = 0; i < cursorCity.getCount(); i++) {
             cursorCity.moveToNext();
             cities.add(cursorCity.getString(cursorCity.getColumnIndex(CityContract.CityEntry.COLUMN_CITY)));
@@ -111,7 +116,7 @@ public class CountryRepository {
         return cities;
     }
 
-    public String getCityDescription(String selectedCityName) {
+    public void loadCityDescription(CallbackCity callbackCity, String selectedCityName) {
         String lowerCase = selectedCityName.toLowerCase();
         byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
         apiDesc.getCityDescription(encode, 1, "demo").enqueue(new Callback<Object>() {
@@ -125,6 +130,7 @@ public class CountryRepository {
                     JSONArray jsonArray1 = jsonObject1.names();
                     String message = jsonObject1.getString((String) jsonArray1.get(0));
                     cityDescription = message;
+                    callbackCity.onResponse(cityDescription);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -134,6 +140,5 @@ public class CountryRepository {
 
             }
         });
-        return cityDescription;
     }
 }

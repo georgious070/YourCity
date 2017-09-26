@@ -3,6 +3,7 @@ package com.example.android.yourcity.busines;
 import com.example.android.yourcity.App;
 import com.example.android.yourcity.data.remote.Api;
 import com.example.android.yourcity.data.repository.CountryRepository;
+import com.example.android.yourcity.ui.detail.CallbackCity;
 import com.example.android.yourcity.ui.home.CallbackCountry;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class CountryInteractor {
         return countryRepository.getCities(selectedCountryName);
     }
 
-    public String getCityDescription(String selectedCityName){
-        return countryRepository.getCityDescription(selectedCityName);
+    public void loadCityDescription(CallbackCity callbackCity, String selectedCityName){
+        countryRepository.loadCityDescription(callbackCity, selectedCityName );
     }
 }

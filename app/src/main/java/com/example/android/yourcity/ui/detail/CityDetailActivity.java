@@ -11,18 +11,26 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.android.yourcity.R;
 import com.example.android.yourcity.ui.base.BaseActivity;
+import com.example.android.yourcity.ui.home.CallbackCountry;
 
 public class CityDetailActivity extends BaseActivity implements CityDetailView {
 
     private static final String KEY_CITY_NAME = "cityName";
     private TextView textCityDetail;
 
+    private final CallbackCity callbackCity = new CallbackCity() {
+        @Override
+        public void onResponse(String cityDescription) {
+            textCityDetail.setText(cityDescription);
+        }
+    };
+
     @InjectPresenter
     CityDetailPresenter cityDetailPresenter;
 
     @ProvidePresenter
     CityDetailPresenter providePresenter() {
-        return new CityDetailPresenter(getIntent().getStringExtra(KEY_CITY_NAME));
+        return new CityDetailPresenter(getIntent().getStringExtra(KEY_CITY_NAME), callbackCity);
     }
 
     public static Intent getIntent(Context context, String selectedCityName) {
@@ -36,10 +44,5 @@ public class CityDetailActivity extends BaseActivity implements CityDetailView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_detail);
         textCityDetail = (TextView) findViewById(R.id.text_city_detail);
-    }
-
-    @Override
-    public void showCityDescriptoin(String cityDescription) {
-        textCityDetail.setText(cityDescription);
     }
 }
