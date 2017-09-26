@@ -29,6 +29,8 @@ import retrofit2.Response;
 
 public class CountryRepository {
 
+    private static final String WIKIPEDIA_USER_NAME = "demo";
+    private static final String JSON_CITY_DESCRIPTION_KEY = "summary";
     private final Context context;
     private final ApiGeonames apiGeonames;
     private final ApiCityDescription apiDesc;
@@ -106,7 +108,7 @@ public class CountryRepository {
                 null,
                 null);
 
-        if(cities!=null){
+        if (cities != null) {
             cities.clear();
         }
         for (int i = 0; i < cursorCity.getCount(); i++) {
@@ -119,7 +121,7 @@ public class CountryRepository {
     public void loadCityDescription(CallbackCity callbackCityDescription, String selectedCityName) {
         String lowerCase = selectedCityName.toLowerCase();
         byte[] encode = lowerCase.getBytes(StandardCharsets.UTF_8);
-        apiDesc.getCityDescription(encode, 1, "demo").enqueue(new Callback<Object>() {
+        apiDesc.getCityDescription(encode, 1, WIKIPEDIA_USER_NAME).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
 
@@ -128,8 +130,7 @@ public class CountryRepository {
                     JSONArray jsonArrayGeonames = jsonObject.names();
                     JSONArray jsonArrayGeonamesFirstArray = jsonObject.getJSONArray((String) jsonArrayGeonames.get(0));
                     JSONObject jsonObjectInsideFirstGeonames = jsonArrayGeonamesFirstArray.getJSONObject(0);
-                    String message = jsonObjectInsideFirstGeonames.getString("summary");
-
+                    String message = jsonObjectInsideFirstGeonames.getString(JSON_CITY_DESCRIPTION_KEY);
                     cityDescription = message;
                     callbackCityDescription.onSuccess(cityDescription);
                 } catch (JSONException e) {
@@ -138,6 +139,7 @@ public class CountryRepository {
                             " A lot of regards, Wikipedia");
                 }
             }
+
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
                 callbackCityDescription.onFailure(t.getMessage());

@@ -17,6 +17,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class AppModule {
 
+    private final String CITY_DESCRIPTION_BASE_URL = "http://api.geonames.org/";
+    private final String GEONAMES_BASE_URL = "https://raw.githubusercontent.com/David-Haim/CountriesToCitiesJSON/master/";
     private final Context context;
 
     public AppModule(App app) {
@@ -32,9 +34,9 @@ public class AppModule {
     @Provides
     @Named("retrofit1")
     @Singleton
-    Retrofit provideRetrofit() {
+    Retrofit provideRetrofitGeonames() {
         return new Retrofit.Builder()
-                .baseUrl("https://raw.githubusercontent.com/David-Haim/CountriesToCitiesJSON/master/")
+                .baseUrl(GEONAMES_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
@@ -42,7 +44,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ApiGeonames provideApi(@Named("retrofit1") Retrofit retrofit){
+    ApiGeonames provideApiGeonames(@Named("retrofit1") Retrofit retrofit) {
         return retrofit.create(ApiGeonames.class);
     }
 
@@ -50,16 +52,16 @@ public class AppModule {
     @Provides
     @Named("retrofit2")
     @Singleton
-    Retrofit provideRetrofit2(){
+    Retrofit provideRetrofitDescription() {
         return new Retrofit.Builder()
-                .baseUrl("http://api.geonames.org/")
+                .baseUrl(CITY_DESCRIPTION_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
     @Provides
     @Singleton
-    ApiCityDescription provideApi2(@Named("retrofit2")Retrofit retrofitXML){
-        return retrofitXML.create(ApiCityDescription.class);
+    ApiCityDescription provideApiDescription(@Named("retrofit2") Retrofit retrofit) {
+        return retrofit.create(ApiCityDescription.class);
     }
 }
