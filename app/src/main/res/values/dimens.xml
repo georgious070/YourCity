@@ -5,4 +5,5 @@
     <dimen name="small">8dp</dimen>
     <dimen name="medium">16dp</dimen>
     <dimen name="large">24dp</dimen>
+    <dimen name="spinner_width">370dp</dimen>
 </resources>

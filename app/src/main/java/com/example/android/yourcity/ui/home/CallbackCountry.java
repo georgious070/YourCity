@@ -4,5 +4,7 @@ import java.util.List;
 
 public interface CallbackCountry {
 
-    void onResponse(List<String> countries);
+    void onSuccess(List<String> countries);
+
+    void onFailure(String errorMessage);
 }

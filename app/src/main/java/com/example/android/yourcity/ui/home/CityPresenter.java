@@ -7,10 +7,13 @@ import com.example.android.yourcity.ui.base.BasePresenter;
 
 import javax.inject.Inject;
 
+import retrofit2.Retrofit;
+
 @InjectViewState
 public class CityPresenter extends BasePresenter<CityView> {
 
     private final CallbackCountry callbackCountry;
+
     @Inject
     CountryInteractor countryInteractor;
 
