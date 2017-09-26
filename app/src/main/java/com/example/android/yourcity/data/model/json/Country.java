@@ -1,5 +1,5 @@
 
-package com.example.android.yourcity.data.model;
+package com.example.android.yourcity.data.model.json;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

@@ -15,6 +15,7 @@ public class YourCityProvider extends ContentProvider {
     private DbHelper dbHelper;
     private static final int COUNTRIES = 100;
     private static final int CITIES = 101;
+    SQLiteDatabase sqLiteDatabase;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -26,6 +27,7 @@ public class YourCityProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         dbHelper = new DbHelper(getContext());
+        sqLiteDatabase = dbHelper.getWritableDatabase();
         return true;
     }
 
@@ -80,7 +82,7 @@ public class YourCityProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
 
         int match = uriMatcher.match(uri);
         long rawId;

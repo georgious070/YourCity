@@ -1,8 +1,8 @@
 package com.example.android.yourcity.busines;
 
 import com.example.android.yourcity.data.repository.CountryRepository;
+import com.example.android.yourcity.ui.home.CallbackCountry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,7 +16,11 @@ public class CountryInteractor {
         this.countryRepository = countryRepository;
     }
 
-    public List<String> getCountries() {
-        return countryRepository.getCountries();
+    public void loadData(CallbackCountry callbackCountry) {
+        countryRepository.loadDataCountry(callbackCountry);
+    }
+
+    public List<String> getCities(String selectedCountryName){
+        return countryRepository.getCities(selectedCountryName);
     }
 }
