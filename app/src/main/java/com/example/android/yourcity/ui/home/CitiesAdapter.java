@@ -13,8 +13,8 @@ import java.util.List;
 
 public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.ViewHolder> {
 
-    private List<String> cities;
-    OnCityClickListener listener;
+    private final List<String> cities;
+    private OnCityClickListener listener;
 
     public CitiesAdapter(List<String> cities, OnCityClickListener listener) {
         this.cities = cities;

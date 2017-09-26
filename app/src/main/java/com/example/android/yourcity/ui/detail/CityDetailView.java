@@ -6,5 +6,5 @@ import com.example.android.yourcity.ui.base.BaseView;
 
 @StateStrategyType(AddToEndStrategy.class)
 public interface CityDetailView extends BaseView {
-
+    //no-op
 }

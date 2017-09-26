@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-
 import com.example.android.yourcity.data.database.CityContract;
 import com.example.android.yourcity.data.database.CountryContract;
 import com.example.android.yourcity.data.remote.ApiCityDescription;
@@ -34,8 +33,8 @@ public class CountryRepository {
     private final Context context;
     private final ApiGeonames apiGeonames;
     private final ApiCityDescription apiDesc;
-    private List<String> countries;
-    private List<String> cities;
+    private final List<String> countries;
+    private final List<String> cities;
     private String cityDescription;
 
     @Inject

@@ -64,7 +64,7 @@ public class CityActivity extends BaseActivity implements CityView,
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                //no-op
             }
         });
 
