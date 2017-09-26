@@ -34,15 +34,15 @@ public class CityDetailActivity extends BaseActivity implements CityDetailView {
         }
     };
 
-    @ProvidePresenter
-    CityDetailPresenter providePresenter() {
-        return new CityDetailPresenter(getIntent().getStringExtra(KEY_CITY_NAME), callbackCity);
-    }
-
     public static Intent getIntent(Context context, String selectedCityName) {
         Intent intent = new Intent(context, CityDetailActivity.class);
         intent.putExtra(KEY_CITY_NAME, selectedCityName);
         return intent;
+    }
+
+    @ProvidePresenter
+    CityDetailPresenter providePresenter() {
+        return new CityDetailPresenter(getIntent().getStringExtra(KEY_CITY_NAME), callbackCity);
     }
 
     @Override

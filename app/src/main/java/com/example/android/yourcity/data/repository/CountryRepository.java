@@ -58,9 +58,9 @@ public class CountryRepository {
                     ContentValues contentValues = new ContentValues();
                     ContentValues contentValues2 = new ContentValues();
 
-                    for (int i = 0; i < 5; i++) {
+                    for (int i = 0; i < countriesJsonArray.length(); i++) {
                         JSONArray citiesJsonArray = jsonObject.getJSONArray((String) countriesJsonArray.get(i));
-                        for (int j = 0; j < 5; j++) {
+                        for (int j = 0; j < citiesJsonArray.length(); j++) {
                             contentValues2.put(CityContract.CityEntry.COLUMN_COUNTRY, (String) countriesJsonArray.get(i));
                             contentValues2.put(CityContract.CityEntry.COLUMN_CITY, citiesJsonArray.getString(j));
                             context.getContentResolver().insert(CityContract.CityEntry.CONTENT_URI, contentValues2);

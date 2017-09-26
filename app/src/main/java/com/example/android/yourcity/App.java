@@ -6,7 +6,6 @@ import com.example.android.yourcity.di.component.AppComponent;
 import com.example.android.yourcity.di.component.DaggerAppComponent;
 import com.example.android.yourcity.di.module.AppModule;
 
-//TODO remove auto import
 public class App extends Application {
 
     private AppComponent appComponent;

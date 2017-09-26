@@ -32,7 +32,7 @@ public class AppModule {
     }
 
     @Provides
-    @Named("retrofit1")
+    @Named("retrofitGeonames")
     @Singleton
     Retrofit provideRetrofitGeonames() {
         return new Retrofit.Builder()
@@ -44,13 +44,13 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ApiGeonames provideApiGeonames(@Named("retrofit1") Retrofit retrofit) {
+    ApiGeonames provideApiGeonames(@Named("retrofitGeonames") Retrofit retrofit) {
         return retrofit.create(ApiGeonames.class);
     }
 
 
     @Provides
-    @Named("retrofit2")
+    @Named("retrofitDescription")
     @Singleton
     Retrofit provideRetrofitDescription() {
         return new Retrofit.Builder()
@@ -61,7 +61,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ApiCityDescription provideApiDescription(@Named("retrofit2") Retrofit retrofit) {
+    ApiCityDescription provideApiDescription(@Named("retrofitDescription") Retrofit retrofit) {
         return retrofit.create(ApiCityDescription.class);
     }
 }
