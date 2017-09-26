@@ -14,7 +14,7 @@ import java.util.List;
 public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.ViewHolder> {
 
     private final List<String> cities;
-    private OnCityClickListener listener;
+    private final OnCityClickListener listener;
 
     public CitiesAdapter(List<String> cities, OnCityClickListener listener) {
         this.cities = cities;
